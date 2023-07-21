@@ -6,7 +6,7 @@ export default function Users({ users }) {
   const router = useRouter();
 
   return (
-    <ul className="list-group">
+    <div className="list-group">
       {users.map((user) => (
         <li
           key={user.id}
@@ -28,6 +28,6 @@ export default function Users({ users }) {
           />
         </li>
       ))}
-    </ul>
+    </div>
   );
 }

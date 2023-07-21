@@ -4,7 +4,7 @@ async function getUser(id) {
   return data;
 }
 
-export default async function UsersPage({ params }) {
+export default async function UserPage({ params }) {
   const user = await getUser(params.id);
 
   return (
