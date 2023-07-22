@@ -16,7 +16,7 @@ export default function RootLayout({ children }) {
       <head>
         <link
           rel="stylesheet"
-          href="https://bootswatch.com/5/flatly/bootstrap.min.css"
+          href="https://bootswatch.com/5/pulse/bootstrap.min.css"
         />
         <link
           rel="stylesheet"
