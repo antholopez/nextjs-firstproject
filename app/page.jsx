@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function IndexPage() {
   const [text, setText] = useState("");
@@ -11,26 +11,30 @@ export default function IndexPage() {
   }
 
   const handleStartClick = () => {
+    console.log(1);
     setListening(true);
-    if (text) setText("");
-    recognition.continuous = true;
+    recognition.continuous = false;
     recognition.lang = "es-ES";
     recognition.interimResults = false;
 
     recognition.start();
 
     recognition.onresult = (event) => {
-      console.log("inicia...");
-      const texto = event.results[event.results.length - 1][0].transcript;
-      console.log("texto: ", texto);
-      console.log("acaba...");
+      const texto =
+        event.results[event.results.length - 1][0].transcript.toLowerCase();
       setText(texto);
     };
   };
 
   const handleStopClick = () => {
     setListening(false);
+    recognition.stop();
     recognition.abort();
+    console.log("Speech recognition aborted.");
+  };
+
+  const clearText = () => {
+    setText("");
   };
 
   return (
@@ -41,7 +45,8 @@ export default function IndexPage() {
           placeholder="Leave a comment here"
           id="floatingTextarea2"
           style={{ height: "100px" }}
-          value={text}
+          value={!listening ? text : ""}
+          onChange={() => {}}
         ></textarea>
         <label htmlFor="floatingTextarea2">Nota de voz...</label>
         <div className="d-flex gap-2 justify-content-center pt-4 pb-5">
@@ -70,7 +75,7 @@ export default function IndexPage() {
         </div>
         {text && !listening ? (
           <div className="d-flex gap-2 justify-content-center">
-            <button className="btn">
+            <button onClick={clearText} className="btn">
               <i
                 className="bi bi-trash3-fill"
                 style={{ fontSize: "1.5rem", color: "gray" }}
