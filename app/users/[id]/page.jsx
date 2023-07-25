@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 async function getUser(id) {
   const res = await fetch(`https://reqres.in/api/users/${id}`);
   const { data } = await res.json();
@@ -12,7 +14,7 @@ export default async function UserPage({ params }) {
       <div className="col-md-6 offset-md-3">
         <div className="card">
           <div className="card-header text-center">
-            <img src={user.avatar} alt={user.email} />
+            <Image src={user.avatar} alt={user.email} />
           </div>
           <div className="card-body text-center">
             <h3>
