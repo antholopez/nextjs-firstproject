@@ -21,7 +21,7 @@ export default function Table({ list }) {
         ) : (
           <>
             {list.map((item, index) => (
-              <tr>
+              <tr key={index}>
                 <th scope="row">{index + 1}</th>
                 <td>{item.description}</td>
                 <td>{item.price}</td>
