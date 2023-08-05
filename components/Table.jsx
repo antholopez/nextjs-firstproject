@@ -1,4 +1,9 @@
-export default function Table({ list }) {
+"use client";
+import { useGlobalState } from "../context/GlobalState";
+
+export default function Table() {
+  const { list } = useGlobalState();
+
   return (
     <table className="table table-success table-striped table-hover caption-top table-responsive-sm table-sm mt-5">
       <caption>Lista de compras</caption>
@@ -14,7 +19,7 @@ export default function Table({ list }) {
       <tbody>
         {!list.length ? (
           <tr>
-            <td colspan="5" class="table-active text-center">
+            <td colSpan="5" className="table-active text-center">
               Lista de compras vacia
             </td>
           </tr>
