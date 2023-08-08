@@ -12,7 +12,7 @@ export default function Table() {
           <th scope="col">#</th>
           <th scope="col">Descripcion</th>
           <th scope="col">Precio (S/.)</th>
-          <th scope="col">Cantidad</th>
+          <th scope="col">Cantidad (kg|lt|sobres)</th>
           <th scope="col">Fecha</th>
         </tr>
       </thead>

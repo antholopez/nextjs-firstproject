@@ -16,7 +16,15 @@ export const useGlobalState = () => {
 export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AppReducer, initialState);
 
+  const addList = (list) =>
+    dispatch({
+      type: "ADD_LIST",
+      payload: list,
+    });
+
   return (
-    <Context.Provider value={{ list: state.list }}>{children}</Context.Provider>
+    <Context.Provider value={{ list: state.list, addList }}>
+      {children}
+    </Context.Provider>
   );
 };

@@ -1,9 +1,12 @@
 "use client";
 import { useState } from "react";
+import { useGlobalState } from "../context/GlobalState";
 
 export default function VoiceNoteInput() {
+  const { addList } = useGlobalState();
   const [text, setText] = useState("");
   const [listening, setListening] = useState(false);
+  const [list, setList] = useState({});
 
   let recognition;
   if (typeof window !== "undefined") {
@@ -24,25 +27,18 @@ export default function VoiceNoteInput() {
       if (event.results[0].isFinal) {
         setListening(false);
         setText(texto);
+        setList(convertStringToJson(texto));
       }
     };
   };
 
-  const handleStopClick = () => {
-    recognition.stop();
-    recognition.abort();
-    console.log("Speech recognition aborted.");
-    console.log("get text: ", text);
-    const data = convertStringToJson(text);
-    console.log("data: ", data);
-  };
-
   const clearText = () => {
     setText("");
+    setList({});
   };
 
   const convertStringToJson = (input) => {
-    const regex = /(.+) (\d+) (kg|lt|sobres) (\d+) soles/;
+    const regex = /(.+) (\d+) (kg|lt|sobres|sobre|bolsa|bolsas) (\d+) soles/;
     const match = RegExp(regex).exec(input);
     console.log(match);
 
@@ -50,28 +46,47 @@ export default function VoiceNoteInput() {
       return null;
     }
 
-    const product = match[1];
+    const description = match[1];
     const quantity = parseInt(match[2], 10);
     const price = parseInt(match[4], 10);
 
     return {
-      product,
+      description,
       quantity,
       price,
     };
+  };
+
+  const saveList = () => {
+    console.log("list: ", list);
+    const options = {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      timeZone: "America/Lima",
+    };
+    const date = new Date().toLocaleString("es-PE", options).replace(",", "");
+    addList({ ...list, date });
+
+    setText("");
+    setList({});
   };
 
   return (
     <div className="form-floating mx-3">
       <textarea
         className="form-control"
-        placeholder="Ejemplo... producto gelatina universal sabor fresa cantidad 3 sobres precio 2 soles"
+        placeholder="Ejemplo... arroz faraon | 5kg | 20 soles"
         id="floatingTextarea2"
         style={{ height: "100px" }}
         value={!listening ? text : ""}
         onChange={() => {}}
       ></textarea>
-      <label htmlFor="floatingTextarea2">Nota de voz...</label>
+      <label htmlFor="floatingTextarea2">
+        Ejemplo... arroz faraon | 5kg | 20 soles
+      </label>
       <div className="d-flex gap-2 justify-content-center pt-4 pb-3">
         <button
           onClick={handleStartClick}
@@ -92,7 +107,7 @@ export default function VoiceNoteInput() {
               style={{ fontSize: "1.5rem", color: "gray" }}
             ></i>
           </button>
-          <button className="btn btn-primary rounded">
+          <button onClick={saveList} className="btn btn-primary rounded">
             <i className="bi bi-save me-2" style={{ fontSize: "" }}></i>
             Registrar
           </button>
